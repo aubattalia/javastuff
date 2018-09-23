@@ -34,45 +34,53 @@ public final class Driver
         QueryResult result = twitter.search(query);
         
         String tempString = "#" + hashtag + "\n";
-        for (Status status : result.getTweets())
+        for (int c = 0; c < 20; c++) 
         {
-        	StringBuilder rtStringBuilder = new StringBuilder().append(status.getText().charAt(0)).append(status.getText().charAt(1));
-        	String rtString = rtStringBuilder.toString();
-        	String cat = "";
-        	String tweet = status.getText();
-        	String url = "";
-        	
-        	if (!(rtString.equals("RT")))
+        	if(result.hasNext())//there are more pages to load
         	{
-        		//Make regex expression to get urls
-          		String pattern = "(http|ftp|https)://([\\w_-]+(?:(?:\\.[\\w_-]+)+))([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?";
+        		query = result.nextQuery();
+        		result = twitter.search(query);
+        	}
+        	for (Status status : result.getTweets())
+        	{
+        		StringBuilder rtStringBuilder = new StringBuilder().append(status.getText().charAt(0)).append(status.getText().charAt(1));
+        		String rtString = rtStringBuilder.toString();
+        		String cat = "";
+        		String tweet = status.getText();
+        		String url = "";
+        	
+        		if (!(rtString.equals("RT")))
+        		{
+        			//Make regex expression to get urls
+          			String pattern = "(http|ftp|https)://([\\w_-]+(?:(?:\\.[\\w_-]+)+))([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?";
           		
-          		Pattern r =  Pattern.compile(pattern);
+          			Pattern r =  Pattern.compile(pattern);
           		
-          		//Matcher		
-          		Matcher m = r.matcher(tweet);
+          			//Matcher		
+          			Matcher m = r.matcher(tweet);
           	
           		
-          		if(m.find( )) {
-          			url = m.group();
-          		}
-          		if(tweet.toLowerCase().contains("gift") || tweet.toLowerCase().contains("gifts") || tweet.toLowerCase().contains("donate") || tweet.toLowerCase().contains("donation") || tweet.toLowerCase().contains("fund")) {
-          			cat = "donations";
-          		}
-          		else if(tweet.toLowerCase().contains("volunteer") || tweet.toLowerCase().contains("volunteering") || tweet.toLowerCase().contains("help") || tweet.toLowerCase().contains("helping")) {
-          			cat += "volunteer";
-          		}
-          		else if(tweet.toLowerCase().contains("rescue") || tweet.toLowerCase().contains("rescuing")) {
-          			cat += "rescue";
-          		}
-          		else {
-          			cat = "news";
-          		}
+          			if(m.find( )) {
+          				url = m.group();
+          			}
+          			if(tweet.toLowerCase().contains("gift") || tweet.toLowerCase().contains("gifts") || tweet.toLowerCase().contains("donate") || tweet.toLowerCase().contains("donation") || tweet.toLowerCase().contains("fund")) {
+          				cat = "donations";
+          			}
+          			else if(tweet.toLowerCase().contains("volunteer") || tweet.toLowerCase().contains("volunteering") || tweet.toLowerCase().contains("help") || tweet.toLowerCase().contains("helping")) {
+          				cat += "volunteer";
+          			}
+          			else if(tweet.toLowerCase().contains("rescue") || tweet.toLowerCase().contains("rescuing")) {
+          				cat += "rescue";
+          			}
+          			else {
+          				cat = "news";
+          			}
             	
-        	tempString += "@" + status.getUser().getScreenName() + "\n" +
-        			status.getText() + "\n" +
-        			status.getId() + "\n" +
-        			url + "\n" + cat + "\n";
+          		tempString += "@" + status.getUser().getScreenName() + "\n" +
+        				status.getText() + "\n" +
+        				status.getId() + "\n" +
+        				url + "\n" + cat + "\n";
+        		}
         	}
         }
         System.out.println(tempString);
