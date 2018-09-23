@@ -56,14 +56,13 @@ public final class Driver
           		if(m.find( )) {
           			url = m.group();
           		}
-          		
-          		if(tweet.toLowerCase().contains("gift") || tweet.toLowerCase().contains("gifts") || tweet.toLowerCase().contains("donate") || tweet.toLowerCase().contains("donation")) {
-          			cat = "donations, ";
+          		if(tweet.toLowerCase().contains("gift") || tweet.toLowerCase().contains("gifts") || tweet.toLowerCase().contains("donate") || tweet.toLowerCase().contains("donation") || tweet.toLowerCase().contains("fund")) {
+          			cat = "donations";
           		}
           		else if(tweet.toLowerCase().contains("volunteer") || tweet.toLowerCase().contains("volunteering") || tweet.toLowerCase().contains("help") || tweet.toLowerCase().contains("helping")) {
-          			cat += "volunteer, ";
+          			cat += "volunteer";
           		}
-          		if(tweet.toLowerCase().contains("rescue") || tweet.toLowerCase().contains("rescuing")) {
+          		else if(tweet.toLowerCase().contains("rescue") || tweet.toLowerCase().contains("rescuing")) {
           			cat += "rescue";
           		}
           		else {
